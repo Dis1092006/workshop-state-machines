@@ -6,6 +6,7 @@ namespace App;
 
 use App\Service\Database;
 use App\Service\MailerService;
+use App\StateMachine\State;
 
 class Worker
 {
@@ -23,8 +24,11 @@ class Worker
         $users = $this->db->getAllUsers();
 
         foreach ($users as $user) {
-            // TODO Create a new StateMachine() object and call ->start()
-            // No DI required, just create a new object.
+            $stateMachine = new StateMachine\StateMachine($this->mailer, $user);
+            $finished = $stateMachine->start(new State\AddYourName());
+            if ($finished) {
+                // remove from database
+            }
         }
 
         $this->db->saveUsers($users);

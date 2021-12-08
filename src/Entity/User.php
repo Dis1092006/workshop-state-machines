@@ -11,6 +11,8 @@ class User
     private $email;
     private $twitter;
 
+    private $lastSentAt;
+
     /**
      * Convert a user to array (used when we store user in database)
      */
@@ -21,6 +23,7 @@ class User
             'name' => $this->name,
             'email' => $this->email,
             'twitter' => $this->twitter,
+            'lastSentAt' => $this->lastSentAt,
         ];
     }
 
@@ -35,6 +38,7 @@ class User
         $user->name = $data['name'] ?? null;
         $user->email = $data['email'] ?? null;
         $user->twitter = $data['twitter'] ?? null;
+        $user->lastSentAt = (int) ($data['lastSentAt'] ?? 0);
 
         return $user;
     }
@@ -73,5 +77,14 @@ class User
     public function setTwitter(?string $twitter)
     {
         $this->twitter = $twitter;
+    }
+    public function getLastSentAt(): \DateTimeImmutable
+    {
+        return (new \DateTimeImmutable())->setTimestamp($this->lastSentAt);
+    }
+
+    public function setLastSentAt(\DateTimeImmutable $lastSentAt)
+    {
+        $this->lastSentAt = $lastSentAt->getTimestamp();
     }
 }
